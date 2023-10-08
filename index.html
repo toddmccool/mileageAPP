@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <h2><title>Todd's bad-ass Mileage App</title>
+</head>
+
+<body>
+
+    Date: <span id="currentDate"></span><br>
+    Time: <span id="currentTime"></span><br>
+
+    Starting Point: <select id="startingPoint">
+        <option value="Sherman Oaks">Sherman Oaks</option>
+        <option value="Fullerton">Fullerton</option>
+        <option value="Other">Other</option>
+    </select>
+    <input type="text" id="customStartingPoint" style="display:none;"><br>
+
+    Starting Mileage: <input type="number" id="startingMileage" value="96000"><br>
+
+    Destination: <select id="destination">
+        <option value="Good Shepherd">Good Shepherd</option>
+        <option value="Disney">Disney</option>
+        <option value="House of Blues Anaheim">House of Blues Anaheim</option>
+        <option value="Bel Air Bay Club">Bel Air Bay Club</option>
+        <!-- Add more options as needed -->
+        <option value="Other">Other</option>
+    </select>
+    <input type="text" id="customDestination" style="display:none;"><br>
+
+    Ending Mileage: <input type="number" id="endingMileage" value="96000"><br>
+
+    <button onclick="generateSummary()">Generate Summary</button>
+    <br><br>
+    <textarea id="summary" cols="60" rows="4"></textarea>
+    <button onclick="copyToClipboard()">Copy</button>
+
+    <script>
+        // Auto fill date and time
+      // Auto fill date and time
+let now = new Date();
+document.getElementById("currentDate").textContent = now.toLocaleDateString();
+document.getElementById("currentTime").textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true });
+
+// Add event listeners
+document.getElementById("startingPoint").addEventListener("change", function () {
+    if (this.value === "Other") {
+        document.getElementById("customStartingPoint").style.display = "block";
+    } else {
+        document.getElementById("customStartingPoint").style.display = "none";
+    }
+    autoFillMileage(); // Trigger mileage calculation on starting point change
+});
+
+document.getElementById("destination").addEventListener("change", function () {
+    if (this.value === "Other") {
+        document.getElementById("customDestination").style.display = "block";
+    } else {
+        document.getElementById("customDestination").style.display = "none";
+    }
+    autoFillMileage();
+});
+
+document.getElementById("startingMileage").addEventListener("input", function () {
+    autoFillMileage();
+});
+
+
+       function autoFillMileage() {
+    const startingPoint = document.getElementById("startingPoint").value;
+    const destination = document.getElementById("destination").value;
+
+    let milesToAdd = 0;
+
+    switch (startingPoint) {
+        case "Fullerton":
+            switch (destination) {
+                case "Good Shepherd":
+                    milesToAdd = 18;
+                    break;
+                case "Disney":
+                    milesToAdd = 4;
+                    break;
+                case "House of Blues Anaheim":
+                    milesToAdd = 4;
+                    break;
+                case "Bel Air Bay Club":
+                    milesToAdd = 46;
+                    break;
+                // Add other destinations for "Fullerton" here...
+            }
+            break;
+
+        case "Sherman Oaks":
+            switch (destination) {
+                case "Good Shepherd":
+                    milesToAdd = 45;
+                    break;
+                case "Disney":
+                    milesToAdd = 45;
+                    break;
+                case "House of Blues Anaheim":
+                    milesToAdd = 45;
+                    break;
+                case "Bel Air Bay Club":
+                    milesToAdd = 15;
+                    break;
+                // Add other destinations for "Sherman Oaks" here...
+            }
+            break;
+
+        // Add other starting points here...
+    }
+
+    const startMileage = parseInt(document.getElementById("startingMileage").value);
+    document.getElementById("endingMileage").value = startMileage + milesToAdd;
+}
+
+        function generateSummary() {
+            const summary = `${document.getElementById("currentDate").textContent}, ${document.getElementById("currentTime").textContent}, Starting: ${document.getElementById("startingPoint").value} and ${document.getElementById("startingMileage").value}, Ending: ${document.getElementById("destination").value} and ${document.getElementById("endingMileage").value}`;
+            document.getElementById("summary").textContent = summary;
+        }
+
+        function copyToClipboard() {
+            const textarea = document.getElementById("summary");
+            textarea.select();
+            document.execCommand("copy");
+        }
+    </script>
+    </h2>
+</body>
+
+</html>
+
